@@ -68,7 +68,13 @@ Internals.getProjects = () => {
 			}
 		}
 
-		Purdy(validProjects)
+		// Purdy(validProjects)
+		return Api.getProjectsMemberships(validProjects)
+	})
+	.then(memberships => {
+		Purdy(memberships)
 	})
 	.fail(defaultErr)
 }
+
+Internals.getProjects()

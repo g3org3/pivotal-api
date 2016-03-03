@@ -49,7 +49,7 @@ function PivotalAPI (_token) {
    }
 
    /*
-    *
+    * Get Account Memberships
     */
    this.getAccountMemberships = (id, callback) => {
       return Internals.apiCall(`/accounts/${id}/memberships`, callback)
@@ -65,6 +65,25 @@ function PivotalAPI (_token) {
          getAccounts.push(this.getAccountMemberships(accounts[i].id))
       }
       return Q.all(getAccounts)
+   }
+
+   /*
+    * Get Project Memberships
+    */
+   this.getProjectMemberships = (id, callback) => {
+      return Internals.apiCall(`/projects/${id}/memberships`, callback)
+   }
+
+   /*
+    * Get Project Memberships
+    */
+   this.getProjectsMemberships = (projects) => {
+
+      var getProjects = []
+      for (var i = 0; i < projects.length; i++) {
+         getProjects.push(this.getProjectMemberships(projects[i].id))
+      }
+      return Q.all(getProjects)
    }
 
    /*
