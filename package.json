@@ -14,6 +14,7 @@
   "license": "MIT",
   "homepage": "https://bitbucket.org/xik/pivotal-api#readme",
   "dependencies": {
+    "lodash": "^4.6.1",
     "needle": "^1.0.0",
     "purdy": "^1.6.0",
     "q": "^1.4.1"
