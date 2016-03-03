@@ -15,6 +15,7 @@
   "homepage": "https://bitbucket.org/xik/pivotal-api#readme",
   "dependencies": {
     "needle": "^1.0.0",
+    "purdy": "^1.6.0",
     "q": "^1.4.1"
   }
 }
