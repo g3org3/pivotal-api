@@ -24,13 +24,62 @@ $ npm i --save https://github.com/g3org3/pivotal-api
 
 ## Get my info
 ```javascript
-  Api.getMyinfo((err, info) => {
+  Api.getMyinfo((err, myInfo) => {
     if (err) console.log(err);
-    else console.log(info);
+    else console.log(myInfo.name);
   });
 
   // Or if you like promises
   Api.getMyinfo()
   .then(res => console.log(res.name) )
+  .fail(err => console.log(err) );
+```
+
+## Get Projects
+```javascript
+  Api.getProjects((err, projects) => {
+    if (err) console.log(err);
+    else console.log(projects);
+  });
+
+  // Or if you like promises
+  Api.getMyinfo()
+  .then(res => console.log(res) )
+  .fail(err => console.log(err) );
+```
+
+## Get Accounts
+```javascript
+  Api.getAccounts((err, accounts) => {
+    if (err) console.log(err);
+    else console.log(projects);
+  });
+
+  // Or if you like promises
+  Api.getAccounts()
+  .then(res => console.log(res) )
+  .fail(err => console.log(err) );
+```
+
+## Get Account's Memberships
+```javascript
+  Api.getAccountMemberships(account_id, (err, memberships) => {
+    if (err) console.log(err);
+    else console.log(memberships);
+  });
+
+  // Or if you like promises
+  Api.getAccountMemberships(account_id)
+  .then(res => console.log(res) )
+  .fail(err => console.log(err) );
+```
+
+## Get Accounts' Memberships
+```javascript
+  // array of accounts with { id }
+  // you could use the getAccounts response 
+  // just with promises
+  Api.getAccountsMemberships(accounts)
+  .then(res => console.log(res) )
   .fail(err => console.log(err) );
 ```
