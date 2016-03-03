@@ -10,10 +10,17 @@ $ npm i --save https://github.com/g3org3/pivotal-api
 ```javascript
   // Dependency
   const PivotalApi = require('pivotal-api')
-  
+
   // User Token
   const Api = new PivotalApi(process.env.PIVOTAL_TOKEN)
 ```
+
+## Api
+
++ getMyinfo
++ getProjects
++ getAccounts
++ getAccountMembership
 
 ## Get my info
 ```javascript
@@ -21,7 +28,7 @@ $ npm i --save https://github.com/g3org3/pivotal-api
     if (err) console.log(err);
     else console.log(info);
   });
-  
+
   // Or if you like promises
   Api.getMyinfo()
   .then(res => console.log(res.name) )
