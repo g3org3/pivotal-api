@@ -30,7 +30,7 @@ function PivotalAPI (_token) {
     * Get My Info
     * - Gets pivotal tracker personal info of the token provided
     */
-   this.getMyinfo = (callback) => {
+   this.getMyInfo = (callback) => {
       return Internals.apiCall('/me', callback)
    }
 

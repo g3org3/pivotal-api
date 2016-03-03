@@ -14,7 +14,7 @@ Internals.array2Object = (array, key) => {
 }
 
 Internals.getProjects = () => {
-	Api.getMyinfo()
+	Api.getMyInfo()
 	.then(me => {
 		// Purdy(me)
 		Internals.myId = me.id
@@ -72,7 +72,7 @@ Internals.getProjects = () => {
 		return Api.getProjectsMemberships(validProjects)
 	})
 	.then(memberships => {
-		Purdy(memberships)
+		Purdy(_.flattenDeep(memberships))
 	})
 	.fail(defaultErr)
 }
