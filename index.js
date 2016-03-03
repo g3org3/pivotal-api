@@ -51,7 +51,7 @@ function PivotalAPI (_token) {
    /*
     *
     */
-   this.getAccountMembership = (id, callback) => {
+   this.getAccountMemberships = (id, callback) => {
       return Internals.apiCall(`/accounts/${id}/memberships`, callback)
    }
 
@@ -62,7 +62,7 @@ function PivotalAPI (_token) {
 
       var getAccounts = []
       for (var i = 0; i < accounts.length; i++) {
-         getAccounts.push(this.getAccountMembership(accounts[i].id))
+         getAccounts.push(this.getAccountMemberships(accounts[i].id))
       }
       return Q.all(getAccounts)
    }
