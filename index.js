@@ -87,6 +87,13 @@ function PivotalAPI (_token) {
    }
 
    /*
+    * Get Project Details
+    */
+   this.getProjectDetails = (id, callback) => {
+      return Internals.apiCall(`/projects/${id}`, callback)
+   }
+
+   /*
     * General
     */
    this.call = (url, callback) => {
