@@ -86,6 +86,44 @@ function PivotalAPI (_token) {
       return Q.all(getProjects)
    }
 
+   this.getStories = (options, callback) => {
+		const { month, year } = options.filter;
+		const { start_month, end_month, start_year, end_year, last_day } = UtilService.getMonthParams(month, year)
+
+		let params = `&accepted_before=${end_year}-${end_month}-01T00:00:00.000Z`
+		params += `&accepted_after=${start_year}-${start_month}-${last_day}T00:00:00.000Z`
+		const url = `/projects/${options.projectId}/stories?with_state=accepted${params}`
+
+		// return callback(null, {url})
+		_apiCall(url, function(err, stories) {
+
+			if (err) return callback(err);
+			return callback(null, { size:  stories.length, stories:stories })
+		});
+	}
+
+	/*
+	 * Get Stories' Activities
+	 */
+	this.getStoryActivities = (projectId, stories) => {
+		var getActivities = []
+
+		for (var i = 0; i < stories.length; i++) {
+			getActivities.push(this.getStoryActivity(projectId, stories[i].id))
+		};
+
+		return Q.all(getActivities)
+	}
+
+	/*
+	 * Get Story's Activity
+	 */
+	this.getStoryActivity = (projectId, storyId, callback) => {
+
+		const _url = `/projects/${projectId}/stories/${storyId}/activity`;
+      return Internals.apiCall(_url, callback)
+	}
+
    /*
     * Get Project Details
     */
