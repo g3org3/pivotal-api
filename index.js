@@ -87,8 +87,13 @@ function PivotalAPI (_token) {
    }
 
    this.getStories = (options, callback) => {
-		const { month, year } = options.filter;
-		const { start_month, end_month, start_year, end_year, last_day } = UtilService.getMonthParams(month, year)
+		const month = options.filter.month;
+      const year = options.filter.year;
+      const start_month = UtilService.getMonthParams(month, year).start_month
+      const end_month = UtilService.getMonthParams(month, year).end_month
+      const start_year = UtilService.getMonthParams(month, year).start_year
+      const end_year = UtilService.getMonthParams(month, year).end_year
+      const last_day = UtilService.getMonthParams(month, year).last_day
 
 		let params = `&accepted_before=${end_year}-${end_month}-01T00:00:00.000Z`
 		params += `&accepted_after=${start_year}-${start_month}-${last_day}T00:00:00.000Z`
