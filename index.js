@@ -22,8 +22,8 @@ function PivotalAPI (_token) {
    Internals.options = {
       headers: {
          'X-TrackerToken': _token
-      }
-      // open_timeout: 20000
+      },
+      open_timeout: 10000
    }
 
    /*
@@ -89,19 +89,19 @@ function PivotalAPI (_token) {
    this.getStories = (options, callback) => {
 		const month = options.filter.month;
       const year = options.filter.year;
-      const start_month = UtilService.getMonthParams(month, year).start_month
-      const end_month = UtilService.getMonthParams(month, year).end_month
-      const start_year = UtilService.getMonthParams(month, year).start_year
-      const end_year = UtilService.getMonthParams(month, year).end_year
-      const last_day = UtilService.getMonthParams(month, year).last_day
+      const start_month = Internals.getMonthParams(month, year).start_month
+      const end_month = Internals.getMonthParams(month, year).end_month
+      const start_year = Internals.getMonthParams(month, year).start_year
+      const end_year = Internals.getMonthParams(month, year).end_year
+      const last_day = Internals.getMonthParams(month, year).last_day
 
 		let params = `&accepted_before=${end_year}-${end_month}-01T00:00:00.000Z`
 		params += `&accepted_after=${start_year}-${start_month}-${last_day}T00:00:00.000Z`
 		const url = `/projects/${options.projectId}/stories?with_state=accepted${params}`
 
 		// return callback(null, {url})
-		_apiCall(url, function(err, stories) {
-
+      console.log(url)
+		Internals.apiCall(url, function(err, stories) {
 			if (err) return callback(err);
 			return callback(null, { size:  stories.length, stories:stories })
 		});
@@ -202,5 +202,61 @@ Internals._apiCallQ = (url, callback) => {
    })
    return defer.promise;
 }
+
+Internals.getMonthParams = (month, year) => {
+   month = Number(month)
+   year = Number(year)
+   let start_month = month;
+   let end_month = month;
+   let start_year = year;
+   let end_year = year;
+
+   if (month == 0) {
+      start_month = '12'
+      end_month = '02'
+      start_year = year - 1
+   }
+   else if (month < 8) {
+      start_month = '0' + month
+      end_month = '0' + (month+2)
+   }
+   else if (month == 8 || month == 9) {
+      start_month = '0' + month
+      end_month = month + 2
+   }
+   else if (month == 10) {
+      end_month = month + 2
+      end_year = year + 1
+   }
+   else if(month == 11) {
+      end_month = '01'
+      end_year = year + 1
+   } else {
+      new Error('Error')
+   }
+
+   return {
+      last_day: Internals.getLastDay[Number(start_month-1)],
+      start_month,
+      end_month,
+      start_year,
+      end_year
+   }
+}
+
+Internals.getLastDay = [
+   '31',
+   '29',
+   '31',
+   '30',
+   '31',
+   '30',
+   '31',
+   '30',
+   '31',
+   '31',
+   '30',
+   '31'
+]
 
 module.exports = PivotalAPI;
