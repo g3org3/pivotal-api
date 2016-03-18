@@ -68,7 +68,7 @@ Internals.getProjects = () => {
 			}
 		}
 
-		// Purdy(validProjects)
+		Purdy(validProjects)
 		return Api.getProjectsMemberships(validProjects)
 	})
 	.then(memberships => {
@@ -77,4 +77,18 @@ Internals.getProjects = () => {
 	.fail(defaultErr)
 }
 
-Internals.getProjects()
+// Internals.getProjects()
+Api.getStories({
+	projectId: 1439658,
+	filter: {
+		month: 2,
+		year: 2016
+	}
+}, (err, response) => {
+	if (err) {
+		Purdy(err)
+	}
+	else {
+		Purdy(_.map(response.stories, story => story.accepted_at))
+	}
+})
