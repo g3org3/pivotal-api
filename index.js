@@ -113,7 +113,7 @@ function PivotalAPI(_token) {
       var url = '/projects/' + options.projectId + '/stories?with_state=accepted' + params;
 
       // return callback(null, {url})
-      console.log(url);
+      // console.log(url)
       Internals.apiCall(url, function (err, stories) {
          if (err) return callback(err);
          return callback(null, { size: stories.length, stories: stories });
