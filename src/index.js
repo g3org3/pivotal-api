@@ -17,7 +17,6 @@ function PivotalAPI (_token) {
    if( !(this instanceof PivotalAPI) ) return new PivotalAPI(_token)
    if (typeof _token == 'undefined') throw new Error('No token provided');
 
-
    Internals.baseUrl = 'https://www.pivotaltracker.com/services/v5'
    Internals.options = {
       headers: {
@@ -91,16 +90,29 @@ function PivotalAPI (_token) {
       const { start_month, end_month, start_year, end_year, last_day } = Internals.getMonthParams(month, year)
 
 		let params = `&accepted_before=${end_year}-${end_month}-01T00:00:00.000Z`
-		params += `&accepted_after=${start_year}-${start_month}-${last_day}T00:00:00.000Z`
+		params += `&accepted_after=${year}-${start_month}-01T00:00:00.000Z`
 		const url = `/projects/${options.projectId}/stories?with_state=accepted${params}`
 
 		// return callback(null, {url})
-      // console.log(url)
+      console.log(url)
 		Internals.apiCall(url, function(err, stories) {
 			if (err) return callback(err);
-			return callback(null, { size:  stories.length, stories:stories })
+			return callback(null, { size:  stories.length, stories: stories })
 		});
 	}
+
+   this.getStoriesCurrentState = (options, callback) => {
+      const params = "with_state="+options.state;
+      const url = `/projects/${options.projectId}/stories?${params}`
+      Internals.apiCall(url, function(err, stories) {
+			if (err) return callback(err);
+			return callback(null, { size:  stories.length, stories: stories })
+		});
+   }
+
+   this.getAllStories = () => {
+
+   }
 
 	/*
 	 * Get Stories' Activities
@@ -230,28 +242,16 @@ Internals.getMonthParams = (month, year) => {
       new Error('Error')
    }
 
+   month++
+   if (month < 10) {
+      start_month = '0'+ month
+   }
+
    return {
-      last_day: Internals.getLastDay[Number(start_month-1)],
       start_month,
       end_month,
-      start_year,
       end_year
    }
 }
-
-Internals.getLastDay = [
-   '31',
-   '29',
-   '31',
-   '30',
-   '31',
-   '30',
-   '31',
-   '30',
-   '31',
-   '31',
-   '30',
-   '31'
-]
 
 module.exports = PivotalAPI;
