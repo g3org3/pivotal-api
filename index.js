@@ -232,12 +232,12 @@ Internals.getMonthParams = function (month, year) {
        before_month = void 0;
 
    after_year = year;
-   after_month = month < 9 ? '0' + month : month;
+   after_month = month <= 9 ? '0' + month : month;
 
    // feb 2015 - dec 2015 - jan 2016
    month++;
    before_year = year;
-   before_month = month < 9 ? '0' + month : month;
+   before_month = month <= 9 ? '0' + month : month;
 
    if (month == 13) {
       before_year = year + 1;

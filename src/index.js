@@ -218,12 +218,12 @@ Internals.getMonthParams = (month, year) => {
    let after_year, after_month, before_year, before_month;
 
    after_year = year;
-   after_month = (month < 9)? '0'+month: month;
+   after_month = (month <= 9)? '0'+month: month;
 
    // feb 2015 - dec 2015 - jan 2016
    month++;
    before_year = year;
-   before_month = (month < 9)? '0'+month: month;
+   before_month = (month <= 9)? '0'+month: month;
 
 
    if (month==13) {
