@@ -87,10 +87,10 @@ function PivotalAPI (_token) {
 
    this.getStories = (options, callback) => {
 		const { month, year } = options.filter;
-      const { start_month, end_month, start_year, end_year, last_day } = Internals.getMonthParams(month, year)
+      const { before_year, before_month, after_year, after_month } = Internals.getMonthParams(month, year)
 
-		let params = `&accepted_before=${end_year}-${end_month}-01T00:00:00.000Z`
-		params += `&accepted_after=${year}-${start_month}-01T00:00:00.000Z`
+		let params = `&accepted_before=${before_year}-${before_month}-01T00:00:00.000Z`
+		params += `&accepted_after=${after_year}-${after_month}-01T00:00:00.000Z`
 		const url = `/projects/${options.projectId}/stories?with_state=accepted${params}`
 
 		// return callback(null, {url})
@@ -213,45 +213,25 @@ Internals._apiCallQ = (url, callback) => {
 Internals.getMonthParams = (month, year) => {
    month = Number(month)
    year = Number(year)
-   let start_month = month;
-   let end_month = month;
-   let start_year = year;
-   let end_year = year;
+   month++;
 
-   if (month == 0) {
-      start_month = '12'
-      end_month = '02'
-      start_year = year - 1
-   }
-   else if (month < 8) {
-      start_month = '0' + month
-      end_month = '0' + (month+2)
-   }
-   else if (month == 8 || month == 9) {
-      start_month = '0' + month
-      end_month = month + 2
-   }
-   else if (month == 10) {
-      end_month = month + 2
-      end_year = year + 1
-   }
-   else if(month == 11) {
-      end_month = '01'
-      end_year = year + 1
-   } else {
-      new Error('Error')
+   let after_year, after_month, before_year, before_month;
+
+   after_year = year;
+   after_month = (month < 9)? '0'+month: month;
+
+   // feb 2015 - dec 2015 - jan 2016
+   month++;
+   before_year = year;
+   before_month = (month < 9)? '0'+month: month;
+
+
+   if (month==13) {
+      before_year = year+1;
+      before_month = '01'
    }
 
-   month++
-   if (month < 10) {
-      start_month = '0'+ month
-   }
-
-   return {
-      start_month,
-      end_month,
-      end_year
-   }
+   return { after_year, after_month, before_year, before_month }
 }
 
 module.exports = PivotalAPI;

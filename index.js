@@ -101,15 +101,14 @@ function PivotalAPI(_token) {
 
       var _Internals$getMonthPa = Internals.getMonthParams(month, year);
 
-      var start_month = _Internals$getMonthPa.start_month;
-      var end_month = _Internals$getMonthPa.end_month;
-      var start_year = _Internals$getMonthPa.start_year;
-      var end_year = _Internals$getMonthPa.end_year;
-      var last_day = _Internals$getMonthPa.last_day;
+      var before_year = _Internals$getMonthPa.before_year;
+      var before_month = _Internals$getMonthPa.before_month;
+      var after_year = _Internals$getMonthPa.after_year;
+      var after_month = _Internals$getMonthPa.after_month;
 
 
-      var params = '&accepted_before=' + end_year + '-' + end_month + '-01T00:00:00.000Z';
-      params += '&accepted_after=' + year + '-' + start_month + '-01T00:00:00.000Z';
+      var params = '&accepted_before=' + before_year + '-' + before_month + '-01T00:00:00.000Z';
+      params += '&accepted_after=' + after_year + '-' + after_month + '-01T00:00:00.000Z';
       var url = '/projects/' + options.projectId + '/stories?with_state=accepted' + params;
 
       // return callback(null, {url})
@@ -225,41 +224,27 @@ Internals._apiCallQ = function (url, callback) {
 Internals.getMonthParams = function (month, year) {
    month = Number(month);
    year = Number(year);
-   var start_month = month;
-   var end_month = month;
-   var start_year = year;
-   var end_year = year;
-
-   if (month == 0) {
-      start_month = '12';
-      end_month = '02';
-      start_year = year - 1;
-   } else if (month < 8) {
-      start_month = '0' + month;
-      end_month = '0' + (month + 2);
-   } else if (month == 8 || month == 9) {
-      start_month = '0' + month;
-      end_month = month + 2;
-   } else if (month == 10) {
-      end_month = month + 2;
-      end_year = year + 1;
-   } else if (month == 11) {
-      end_month = '01';
-      end_year = year + 1;
-   } else {
-      new Error('Error');
-   }
-
    month++;
-   if (month < 10) {
-      start_month = '0' + month;
+
+   var after_year = void 0,
+       after_month = void 0,
+       before_year = void 0,
+       before_month = void 0;
+
+   after_year = year;
+   after_month = month < 9 ? '0' + month : month;
+
+   // feb 2015 - dec 2015 - jan 2016
+   month++;
+   before_year = year;
+   before_month = month < 9 ? '0' + month : month;
+
+   if (month == 13) {
+      before_year = year + 1;
+      before_month = '01';
    }
 
-   return {
-      start_month: start_month,
-      end_month: end_month,
-      end_year: end_year
-   };
+   return { after_year: after_year, after_month: after_month, before_year: before_year, before_month: before_month };
 };
 
 module.exports = PivotalAPI;
