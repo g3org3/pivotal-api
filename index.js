@@ -31,7 +31,7 @@ function PivotalAPI(_token) {
       headers: {
          'X-TrackerToken': _token
       },
-      open_timeout: 10000
+      open_timeout: 60 * 1000
    };
 
    /*
