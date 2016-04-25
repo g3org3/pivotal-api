@@ -128,7 +128,29 @@ function PivotalAPI(_token) {
       });
    };
 
-   this.getAllStories = function () {};
+   this.getAllStories = function (_ref, callback) {
+      var project_id = _ref.project_id;
+      var start_time = _ref.start_time;
+      var filter = _ref.filter;
+
+
+      var after = new Date(start_time);
+      var before = new Date();
+
+      // +1 day
+      before.setDate(before.getDate() + 1);
+
+      var params = {
+         with_state: 'accepted',
+         accepted_before: before.toISOString(),
+         accepted_after: after.toISOString(),
+         limit: 1200 // about 2 years of stories
+      };
+
+      var url = '/projects/' + project_id + '/stories?' + Internals.objectToUrlParams(params);
+
+      return Internals.apiCall(url, callback);
+   };
 
    /*
     * Get Stories' Activities
@@ -245,6 +267,20 @@ Internals.getMonthParams = function (month, year) {
    }
 
    return { after_year: after_year, after_month: after_month, before_year: before_year, before_month: before_month };
+};
+
+Internals.objectToUrlParams = function (obj) {
+   var keys = Object.keys(obj);
+   var url = "";
+   for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      var value = obj[key];
+      url += key + '=' + value;
+      if (i != keys.length - 1) {
+         url += '&';
+      }
+   }
+   return url;
 };
 
 module.exports = PivotalAPI;

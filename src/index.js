@@ -110,8 +110,24 @@ function PivotalAPI (_token) {
 		});
    }
 
-   this.getAllStories = () => {
+   this.getAllStories = ({ project_id, start_time, filter }, callback) => {
 
+      const after = new Date(start_time);
+      const before = new Date()
+
+      // +1 day
+      before.setDate(before.getDate()+1)
+
+      const params = {
+         with_state: 'accepted',
+         accepted_before: before.toISOString(),
+         accepted_after: after.toISOString(),
+         limit: 1200 // about 2 years of stories
+      }
+
+      const url = `/projects/${project_id}/stories?${Internals.objectToUrlParams(params)}`
+
+      return Internals.apiCall(url, callback)
    }
 
 	/*
@@ -232,6 +248,20 @@ Internals.getMonthParams = (month, year) => {
    }
 
    return { after_year, after_month, before_year, before_month }
+}
+
+Internals.objectToUrlParams = (obj) => {
+	var keys = Object.keys(obj)
+	var url = "";
+	for (var i = 0; i < keys.length; i++) {
+		var key = keys[i]
+		var value = obj[key]
+		url += key+'='+value
+		if (i!=keys.length-1) {
+			url += '&'
+		}
+	}
+	return url
 }
 
 module.exports = PivotalAPI;
